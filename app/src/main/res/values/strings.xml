@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Meli Searchable</string>
+    <string name="content_desc_divider">Divisor</string>
+
 </resources>
