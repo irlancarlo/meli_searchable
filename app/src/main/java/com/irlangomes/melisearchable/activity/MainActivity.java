@@ -1,8 +1,8 @@
 package com.irlangomes.melisearchable.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.irlangomes.melisearchable.R;
 import com.irlangomes.melisearchable.adapter.ProductAdapter;
+import com.irlangomes.melisearchable.api.MeliService;
+import com.irlangomes.melisearchable.helper.RetrofitConfig;
 import com.irlangomes.melisearchable.model.Product;
+import com.irlangomes.melisearchable.model.ResultProduct;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Product> products = new ArrayList<>();
     private ProductAdapter productAdapter;
     private MaterialSearchView searchView;
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +42,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // init components
         recyclerProduct = findViewById(R.id.recyclerProduct);
         searchView = findViewById(R.id.searchView);
 
+        // init config
+        retrofit = RetrofitConfig.initRetrofit();
 
-        // Config recycler
-        generateProduct();
-        productAdapter = new ProductAdapter(products, this);
-        recyclerProduct.setHasFixedSize(true);
-        recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
-        recyclerProduct.setAdapter(productAdapter);
+
+        // Find result product
+        findProduct();
+
 
         //config searchView
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -80,17 +90,30 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void generateProduct() {
-        Product product = new Product();
-        product.setPicture("mot1.jpg");
-        product.setTitle("Motorola Moto G6 Play Bueno Negro Liberado");
-        product.setPrice("22699");
-        products.add(product);
+    public void findProduct() {
+        MeliService meliService = retrofit.create(MeliService.class);
+        meliService.findProduct("Motorola 20G6")
+        .enqueue(new Callback<ResultProduct>() {
+            @Override
+            public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
+                if(response.isSuccessful()){
+                    products = response.body().results;
+                    configRecycleView();
+                }
+            }
 
-        product = new Product();
-        product.setPicture("mot2.jpg");
-        product.setTitle("Motorola Moto G6 Play Bueno Negro Liberado 32 GB cinza-titatinum 2 GB RAM ");
-        product.setPrice("33500.99");
-        products.add(product);
+            @Override
+            public void onFailure(Call<ResultProduct> call, Throwable t) {
+
+            }
+        });
     }
+
+    public void configRecycleView(){
+        productAdapter = new ProductAdapter(products, this);
+        recyclerProduct.setHasFixedSize(true);
+        recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProduct.setAdapter(productAdapter);
+    }
+
 }
