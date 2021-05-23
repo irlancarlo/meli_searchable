@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#FFDB13</color>
-    <color name="color_primary_dark">#FFDB13</color>
+    <color name="color_primary">#FFE600</color>
+    <color name="color_primary_dark">#FFE600</color>
     <color name="color_accent">#2C8AE7</color>
     <color name="medium_gray">#ebebeb</color>
 </resources>
