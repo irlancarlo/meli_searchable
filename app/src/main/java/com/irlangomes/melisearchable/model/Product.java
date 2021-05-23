@@ -5,6 +5,7 @@ public class Product {
     public String title;
     public String price;
     public String thumbnail;
+    public String rating;
     public String picture;
 
 }

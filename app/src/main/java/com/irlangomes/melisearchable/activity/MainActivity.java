@@ -1,7 +1,6 @@
 package com.irlangomes.melisearchable.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -38,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Create global configuration and initialize ImageLoader with this config
+//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+//        ImageLoader.getInstance().init(config);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
                 if(response.isSuccessful()){
-                    products = response.body().results;
+                    List<Product> results = response.body().results;
+                    products = results;
                     configRecycleView();
                 }
             }
