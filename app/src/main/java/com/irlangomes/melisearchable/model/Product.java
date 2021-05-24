@@ -1,6 +1,8 @@
 package com.irlangomes.melisearchable.model;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     public String id;
     public String title;
     public String price;

@@ -1,8 +1,11 @@
 package com.irlangomes.melisearchable.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +16,7 @@ import com.irlangomes.melisearchable.R;
 import com.irlangomes.melisearchable.adapter.ProductAdapter;
 import com.irlangomes.melisearchable.api.MeliService;
 import com.irlangomes.melisearchable.helper.RetrofitConfig;
+import com.irlangomes.melisearchable.listener.RecyclerItemClickListener;
 import com.irlangomes.melisearchable.model.Product;
 import com.irlangomes.melisearchable.model.ResultProduct;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -52,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         findProduct("moto G");
 
         //config searchView
+        configSearchView();
+
+    }
+
+    private void configSearchView() {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -75,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 findProduct("");
             }
         });
-
     }
 
     @Override
@@ -113,6 +121,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerProduct.setHasFixedSize(true);
         recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
         recyclerProduct.setAdapter(productAdapter);
+        recyclerProduct.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, recyclerProduct, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Product product = products.get(position);
+                        Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
+                        intent.putExtra("idProduct", product.id);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }));
     }
 
 }
