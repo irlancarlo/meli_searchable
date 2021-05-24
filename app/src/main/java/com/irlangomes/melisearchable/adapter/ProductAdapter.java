@@ -40,14 +40,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Product product = products.get(position);
         holder.title.setText(product.title);
-        holder.price.setText(product.price);
+        holder.price.setText(product.getPrice());
 
         String url = product.thumbnail;
         Glide
             .with(context)
             .load(url)
             .into(holder.thumbnail);
-
     }
 
     @Override

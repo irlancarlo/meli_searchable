@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         retrofit = RetrofitConfig.initRetrofit();
 
         // Find result product
-        findProduct("moto G");
+        findProduct("");
 
         //config searchView
         configSearchView();
