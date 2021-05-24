@@ -1,7 +1,6 @@
 package com.irlangomes.melisearchable.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.irlangomes.melisearchable.R;
 import com.irlangomes.melisearchable.model.Product;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +43,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.price.setText(product.price);
 
         String url = product.thumbnail;
-        Log.d("thumbnail", url);
-        Picasso.get().load(new File(url)).placeholder(R.drawable.thumbnail).into(holder.thumbnail);
+        Glide
+            .with(context)
+            .load(url)
+            .into(holder.thumbnail);
 
     }
 

@@ -38,10 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create global configuration and initialize ImageLoader with this config
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-//        ImageLoader.getInstance().init(config);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,16 +48,15 @@ public class MainActivity extends AppCompatActivity {
         // init config
         retrofit = RetrofitConfig.initRetrofit();
 
-
         // Find result product
-        findProduct();
-
+        findProduct("moto G");
 
         //config searchView
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                findProduct(query);
+                return true;
             }
 
             @Override
@@ -77,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSearchViewClosed() {
-
+                findProduct("");
             }
         });
 
@@ -93,27 +88,27 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void findProduct() {
+    public void findProduct(String query) {
         MeliService meliService = retrofit.create(MeliService.class);
-        meliService.findProduct("Motorola 20G6")
-        .enqueue(new Callback<ResultProduct>() {
-            @Override
-            public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
-                if(response.isSuccessful()){
-                    List<Product> results = response.body().results;
-                    products = results;
-                    configRecycleView();
-                }
-            }
+        meliService.findProduct(query)
+                .enqueue(new Callback<ResultProduct>() {
+                    @Override
+                    public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
+                        if (response.isSuccessful()) {
+                            List<Product> results = response.body().results;
+                            products = results;
+                            configRecycleView();
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ResultProduct> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<ResultProduct> call, Throwable t) {
 
-            }
-        });
+                    }
+                });
     }
 
-    public void configRecycleView(){
+    public void configRecycleView() {
         productAdapter = new ProductAdapter(products, this);
         recyclerProduct.setHasFixedSize(true);
         recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
