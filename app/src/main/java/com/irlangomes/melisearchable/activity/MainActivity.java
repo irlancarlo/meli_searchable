@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ProductAdapter productAdapter;
     private MaterialSearchView searchView;
     private Retrofit retrofit;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         // init components
         recyclerProduct = findViewById(R.id.recyclerProduct);
         searchView = findViewById(R.id.searchView);
+        progressBar = findViewById(R.id.progressBarAllProduct);
+        progressBar.setVisibility(View.GONE);
 
         // init config
         retrofit = RetrofitConfig.initRetrofit();
@@ -97,16 +101,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findProduct(String query) {
+        progressBar.setVisibility(View.VISIBLE);
         MeliService meliService = retrofit.create(MeliService.class);
         meliService.findProduct(query)
                 .enqueue(new Callback<ResultProduct>() {
                     @Override
                     public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
-                        if (response.isSuccessful()) {
-                            List<Product> results = response.body().results;
-                            products = results;
-                            configRecycleView();
-                        }
+                        resultFindProduct(response);
+                        progressBar.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -114,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void resultFindProduct(Response<ResultProduct> response) {
+        if (response.isSuccessful()) {
+            List<Product> results = response.body().results;
+            products = results;
+            configRecycleView();
+        }
     }
 
     public void configRecycleView() {

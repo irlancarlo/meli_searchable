@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
 
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
     private Context context;
 
     public ProductAdapter(List<Product> products, Context context) {
@@ -48,6 +48,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             .load(url)
             .into(holder.thumbnail);
     }
+
 
     @Override
     public int getItemCount() {

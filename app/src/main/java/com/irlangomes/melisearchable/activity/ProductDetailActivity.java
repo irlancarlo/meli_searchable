@@ -2,6 +2,8 @@ package com.irlangomes.melisearchable.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView txtTitleProductDetail;
     private TextView txtPriceProductDetail;
     private TextView txtCountProductDetail;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         txtTitleProductDetail = findViewById(R.id.txtTitleProductDetail);
         txtPriceProductDetail = findViewById(R.id.txtPriceProductDetail);
         txtCountProductDetail = findViewById(R.id.txtCountProductDetail);
+        progressBar = findViewById(R.id.progressBarProductDetail);
+        progressBar.setVisibility(View.GONE);
 
         // get idProduct
         String idProduct = getIntent().getExtras().getString("idProduct");
@@ -79,6 +84,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void findProductDetail(String idProduct) {
+        progressBar.setVisibility(View.VISIBLE);
         MeliService meliService = retrofit.create(MeliService.class);
         meliService.findProductDetail(idProduct)
         .enqueue(new Callback<Product>() {
@@ -90,6 +96,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     txtPriceProductDetail.setText(product.getPrice());
                     configViewPager();
                     countPictures(0, product.pictures.size());
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
