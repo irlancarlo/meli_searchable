@@ -13,31 +13,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.irlangomes.melisearchable.R;
 import com.irlangomes.melisearchable.adapter.ProductAdapter;
-import com.irlangomes.melisearchable.api.MeliService;
-import com.irlangomes.melisearchable.helper.RetrofitConfig;
 import com.irlangomes.melisearchable.listener.RecyclerItemClickListener;
 import com.irlangomes.melisearchable.model.Product;
-import com.irlangomes.melisearchable.model.ResultProduct;
+import com.irlangomes.melisearchable.presenter.ListProduct;
+import com.irlangomes.melisearchable.presenter.ListProductPresenterImpl;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListProduct.ListProductView {
 
     private RecyclerView recyclerProduct;
-    private List<Product> products = new ArrayList<>();
     private ProductAdapter productAdapter;
     private MaterialSearchView searchView;
-    private Retrofit retrofit;
     private ProgressBar progressBar;
+    private ListProduct.ListProductPresenter presenter;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +41,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //init presenter
+        presenter = new ListProductPresenterImpl();
+        presenter.setView(this);
+
         // init components
         recyclerProduct = findViewById(R.id.recyclerProduct);
         searchView = findViewById(R.id.searchView);
         progressBar = findViewById(R.id.progressBarAllProduct);
         progressBar.setVisibility(View.GONE);
-
-        // init config
-        retrofit = RetrofitConfig.initRetrofit();
+        view = findViewById(R.id.linearLayoutAllProduct);
 
         //config searchView
         configSearchView();
-
     }
 
     private void configSearchView() {
@@ -77,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-
             }
 
             @Override
@@ -90,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         MenuItem item = menu.findItem(R.id.menu_search);
         searchView.setMenuItem(item);
 
@@ -99,31 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void findProduct(String query) {
         progressBar.setVisibility(View.VISIBLE);
-        MeliService meliService = retrofit.create(MeliService.class);
-        meliService.findProduct(query)
-                .enqueue(new Callback<ResultProduct>() {
-                    @Override
-                    public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
-                        resultFindProduct(response);
-                        progressBar.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResultProduct> call, Throwable t) {
-
-                    }
-                });
+        presenter.findProduct(query);
     }
 
-    private void resultFindProduct(Response<ResultProduct> response) {
-        if (response.isSuccessful()) {
-            List<Product> results = response.body().results;
-            products = results;
-            configRecycleView();
-        }
-    }
-
-    public void configRecycleView() {
+    public void configRecycleView(List<Product> products) {
         productAdapter = new ProductAdapter(products, this);
         recyclerProduct.setHasFixedSize(true);
         recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
@@ -150,4 +122,25 @@ public class MainActivity extends AppCompatActivity {
                 }));
     }
 
+    @Override
+    public void displayProduct(List<Product> results) {
+        configRecycleView(results);
+    }
+
+    @Override
+    public void displayError() {
+        Snackbar.make(view, "Erro ao carregar a lista de produtos.", Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void setGoneProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
+    }
 }
