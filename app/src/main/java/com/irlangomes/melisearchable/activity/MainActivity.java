@@ -56,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
         // init config
         retrofit = RetrofitConfig.initRetrofit();
 
-        // Find result product
-        findProduct("");
-
         //config searchView
         configSearchView();
 
