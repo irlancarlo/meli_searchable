@@ -44,8 +44,8 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         setContentView(R.layout.activity_product_detail);
 
         // init presenter
-        presenter = new ProductDetailPresenterImpl();
-        presenter.setView(this);
+        presenter = new ProductDetailPresenterImpl(this,
+                RetrofitConfig.initRetrofit().create(MeliService.class));
 
         // init components
         viewPager = findViewById(R.id.viewPager);
@@ -54,7 +54,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         txtCountProductDetail = findViewById(R.id.txtCountProductDetail);
         progressBar = findViewById(R.id.progressBarProductDetail);
         progressBar.setVisibility(View.GONE);
-        view  = findViewById(R.id.linearLayoutProductDetail);
+        view = findViewById(R.id.linearLayoutProductDetail);
 
         // get idProduct
         String idProduct = getIntent().getExtras().getString("idProduct");

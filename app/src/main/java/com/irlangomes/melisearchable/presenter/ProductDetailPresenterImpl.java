@@ -11,18 +11,17 @@ import retrofit2.Response;
 public class ProductDetailPresenterImpl implements ProductDetail.ProductDetailPresenter {
 
     private ProductDetail.ProductDetailView view;
+    private MeliService meliService;
 
-    @Override
-    public void setView(ProductDetail.ProductDetailView view) {
+    public ProductDetailPresenterImpl(ProductDetail.ProductDetailView view, MeliService meliService) {
         this.view = view;
+        this.meliService = meliService;
     }
 
     @Override
     public void findProductDetail(String idProduct) {
         view.setVisibleProgressBar();
-        MeliService meliService = RetrofitConfig.initRetrofit().create(MeliService.class);
-        meliService.findProductDetail(idProduct)
-                .enqueue(new Callback<Product>() {
+        meliService.findProductDetail(idProduct).enqueue(new Callback<Product>() {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
                         if(response.isSuccessful()){

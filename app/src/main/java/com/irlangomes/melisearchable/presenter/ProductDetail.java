@@ -17,7 +17,6 @@ public interface ProductDetail {
     }
 
     interface ProductDetailPresenter {
-        void setView(ProductDetailView view);
         void findProductDetail(String idProduct);
         String countPictures(int currentPosition, int total);
         void destroyView();
