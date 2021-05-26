@@ -64,13 +64,19 @@ Fonte: [Instruções de configuração do Espresso](https://developer.android.co
 ### Telas do Aplicativo
 
 Campo de busca:
-![Screenshot](campo_busca.png)
+<p align="center">
+  <img src="campo_busca.png" width="350" title="Campo de busca">
+</p>
 
 Resultado da busca:
-![Screenshot](resultado_busca.png)
+<p align="center">
+  <img src="resultado_busca.png" width="350" title="Campo de busca">
+</p>
 
 Detalhe do produto:
-![Screenshot](detalhe_produto.png)
+<p align="center">
+  <img src="detalhe_produto.png" width="350" title="Campo de busca">
+</p>
 
 
 ## License
