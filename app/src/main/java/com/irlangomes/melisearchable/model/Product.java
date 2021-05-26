@@ -20,4 +20,8 @@ public class Product implements Serializable {
                 .format(Float.parseFloat(price));
         return format;
     }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 }

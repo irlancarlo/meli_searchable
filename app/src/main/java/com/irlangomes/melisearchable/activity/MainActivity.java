@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.irlangomes.melisearchable.R;
 import com.irlangomes.melisearchable.adapter.ProductAdapter;
+import com.irlangomes.melisearchable.api.MeliService;
+import com.irlangomes.melisearchable.helper.RetrofitConfig;
 import com.irlangomes.melisearchable.listener.RecyclerItemClickListener;
 import com.irlangomes.melisearchable.model.Product;
 import com.irlangomes.melisearchable.presenter.ListProduct;
@@ -42,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements ListProduct.ListP
         setSupportActionBar(toolbar);
 
         //init presenter
-        presenter = new ListProductPresenterImpl();
-        presenter.setView(this);
+        presenter = new ListProductPresenterImpl(this,
+                RetrofitConfig.initRetrofit().create(MeliService.class));
 
         // init components
         recyclerProduct = findViewById(R.id.recyclerProduct);

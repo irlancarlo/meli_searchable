@@ -14,17 +14,16 @@ import retrofit2.Response;
 public class ListProductPresenterImpl implements ListProduct.ListProductPresenter {
 
     private ListProduct.ListProductView view;
+    private MeliService meliService;
 
-    @Override
-    public void setView(ListProduct.ListProductView view) {
+    public ListProductPresenterImpl(ListProduct.ListProductView view, MeliService meliService) {
         this.view = view;
+        this.meliService = meliService;
     }
 
     @Override
     public void findProduct(String query) {
-        MeliService meliService = RetrofitConfig.initRetrofit().create(MeliService.class);
-        meliService.findProduct(query)
-                .enqueue(new Callback<ResultProduct>() {
+        meliService.findProduct(query).enqueue(new Callback<ResultProduct>() {
                     @Override
                     public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
                         if(response.isSuccessful()){

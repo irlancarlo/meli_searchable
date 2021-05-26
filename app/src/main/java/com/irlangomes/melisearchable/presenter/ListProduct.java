@@ -13,7 +13,6 @@ public interface ListProduct {
     }
 
     interface ListProductPresenter {
-        void setView(ListProductView view);
         void findProduct(String query);
         void destroyView();
     }
