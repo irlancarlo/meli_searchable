@@ -1,5 +1,6 @@
 package com.irlangomes.melisearchable.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -19,10 +21,12 @@ import com.irlangomes.melisearchable.model.Picture;
 import com.irlangomes.melisearchable.presenter.ProductDetail;
 import com.irlangomes.melisearchable.presenter.ProductDetailPresenterImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetail.ProductDetailView {
 
+    private static final String LIST_DETAIL_PRODUCT_STATE_KEY = "PRODUCT_DETAIL_STATE";
     private ViewPager viewPager;
     private TextView txtTitleProductDetail;
     private TextView txtPriceProductDetail;
@@ -30,6 +34,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     private ProgressBar progressBar;
     private ProductDetail.ProductDetailPresenter presenter;
     private LinearLayout view;
+    private List<Picture> pictureListState = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @Override
     public void configViewPager(List<Picture> pictureList) {
+        this.pictureListState = pictureList;
         ProductDetailAdapter adapter = new ProductDetailAdapter(this, pictureList);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -111,5 +117,33 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroyView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelableArrayList(LIST_DETAIL_PRODUCT_STATE_KEY, new ArrayList<>(pictureListState));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        if(state != null){
+            pictureListState = state.getParcelableArrayList(LIST_DETAIL_PRODUCT_STATE_KEY);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!pictureListState.isEmpty()){
+            configViewPager(pictureListState);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

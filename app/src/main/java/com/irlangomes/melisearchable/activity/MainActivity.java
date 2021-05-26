@@ -30,7 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListProduct.ListProductView {
 
-    private static final String LIST_STATE_KEY = "PRODUCT_LIST";
+    private static final String LIST_STATE_KEY = "PRODUCT_STATE";
     private RecyclerView recyclerProduct;
     private ProductAdapter productAdapter;
     private MaterialSearchView searchView;
