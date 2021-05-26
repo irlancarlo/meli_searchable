@@ -61,6 +61,7 @@
         app:layout_constraintGuide_percent="0.4" />
 
     <include
+        android:id="@+id/include"
         layout="@layout/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"

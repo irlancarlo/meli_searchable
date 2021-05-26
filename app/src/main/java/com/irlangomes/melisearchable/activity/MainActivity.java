@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,16 +25,19 @@ import com.irlangomes.melisearchable.presenter.ListProduct;
 import com.irlangomes.melisearchable.presenter.ListProductPresenterImpl;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListProduct.ListProductView {
 
+    private static final String LIST_STATE_KEY = "PRODUCT_LIST";
     private RecyclerView recyclerProduct;
     private ProductAdapter productAdapter;
     private MaterialSearchView searchView;
     private ProgressBar progressBar;
     private ListProduct.ListProductPresenter presenter;
     private View view;
+    private List<Product> productListState = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements ListProduct.ListP
     }
 
     public void configRecycleView(List<Product> products) {
+        this.productListState = products;
         productAdapter = new ProductAdapter(products, this);
         recyclerProduct.setHasFixedSize(true);
         recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
@@ -163,5 +168,28 @@ public class MainActivity extends AppCompatActivity implements ListProduct.ListP
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroyView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelableArrayList(LIST_STATE_KEY, new ArrayList<>(productListState));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        if(state != null){
+            productListState = state.getParcelableArrayList(LIST_STATE_KEY);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!productListState.isEmpty()){
+            configRecycleView(productListState);
+        }
     }
 }

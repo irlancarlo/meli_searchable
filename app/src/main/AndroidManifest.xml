@@ -13,8 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeliSearchable"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ProductDetailActivity" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.ProductDetailActivity" android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".activity.MainActivity" android:configChanges="orientation|keyboardHidden|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
