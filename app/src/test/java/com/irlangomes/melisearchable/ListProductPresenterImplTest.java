@@ -82,6 +82,54 @@ public class ListProductPresenterImplTest {
     }
 
     @Test
+    public void findProductTestSuccessWithoutBody() {
+        // scenario
+        ResultProduct resultProduct = null;
+
+        Call<ResultProduct> resultProductCall = mock(Call.class);
+        when(meliService.findProduct(PRODUCT_NAME)).thenReturn(resultProductCall);
+        doAnswer(new Answer() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                Callback<ResultProduct> callback = invocation.getArgument(0);
+                callback.onResponse(resultProductCall, Response.success(resultProduct));
+                return null;
+            }
+        }).when(resultProductCall).enqueue(any(Callback.class));
+
+        // action
+        presenter.findProduct(PRODUCT_NAME);
+
+        // validation
+        verify(view).setGoneProgressBar();
+        verify(view).displayEmptySearchMsg();
+    }
+
+    @Test
+    public void findProductTestSuccessEmptyList() {
+        // scenario
+        ResultProduct resultProduct = new ResultProduct();
+
+        Call<ResultProduct> resultProductCall = mock(Call.class);
+        when(meliService.findProduct(PRODUCT_NAME)).thenReturn(resultProductCall);
+        doAnswer(new Answer() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                Callback<ResultProduct> callback = invocation.getArgument(0);
+                callback.onResponse(resultProductCall, Response.success(resultProduct));
+                return null;
+            }
+        }).when(resultProductCall).enqueue(any(Callback.class));
+
+        // action
+        presenter.findProduct(PRODUCT_NAME);
+
+        // validation
+        verify(view).setGoneProgressBar();
+        verify(view).displayEmptySearchMsg();
+    }
+
+    @Test
     public void findProductTestError() {
         // scenario
         ResultProduct resultProduct = new ResultProduct();
@@ -111,7 +159,7 @@ public class ListProductPresenterImplTest {
 
         // validation
         verify(view).setGoneProgressBar();
-        verify(view).displayError();
+        verify(view).displayEmptySearchMsg();
     }
 
     @Test
@@ -134,7 +182,7 @@ public class ListProductPresenterImplTest {
         // validation
         verify(meliService).findProduct(PRODUCT_NAME);
         verify(view).setGoneProgressBar();
-        verify(view).displayError();
+        verify(view).displayErrorMsg();
     }
 
     @After

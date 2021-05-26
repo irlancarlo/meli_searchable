@@ -1,7 +1,6 @@
 package com.irlangomes.melisearchable.presenter;
 
 import com.irlangomes.melisearchable.api.MeliService;
-import com.irlangomes.melisearchable.helper.RetrofitConfig;
 import com.irlangomes.melisearchable.model.Product;
 import com.irlangomes.melisearchable.model.ResultProduct;
 
@@ -24,24 +23,30 @@ public class ListProductPresenterImpl implements ListProduct.ListProductPresente
     @Override
     public void findProduct(String query) {
         meliService.findProduct(query).enqueue(new Callback<ResultProduct>() {
-                    @Override
-                    public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
-                        if(response.isSuccessful()){
-                            view.setGoneProgressBar();
-                            List<Product> results = response.body().results;
-                            view.displayProduct(results);
-                        } else {
-                            view.setGoneProgressBar();
-                            view.displayError();
-                        }
-                    }
+            @Override
+            public void onResponse(Call<ResultProduct> call, Response<ResultProduct> response) {
+                responseCallback(response);
+            }
 
-                    @Override
-                    public void onFailure(Call<ResultProduct> call, Throwable t) {
-                        view.setGoneProgressBar();
-                        view.displayError();
-                    }
-                });
+            @Override
+            public void onFailure(Call<ResultProduct> call, Throwable t) {
+                view.setGoneProgressBar();
+                view.displayErrorMsg();
+            }
+        });
+    }
+
+    private void responseCallback(Response<ResultProduct> response) {
+        view.setGoneProgressBar();
+        if (response.isSuccessful()
+                && response.body() != null
+                && !response.body().results.isEmpty()) {
+
+            List<Product> results = response.body().results;
+            view.displayProduct(results);
+        } else {
+            view.displayEmptySearchMsg();
+        }
     }
 
     @Override

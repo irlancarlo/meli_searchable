@@ -3,8 +3,6 @@ package com.irlangomes.melisearchable;
 import com.irlangomes.melisearchable.api.MeliService;
 import com.irlangomes.melisearchable.model.Picture;
 import com.irlangomes.melisearchable.model.Product;
-import com.irlangomes.melisearchable.model.ResultProduct;
-import com.irlangomes.melisearchable.presenter.ListProductPresenterImpl;
 import com.irlangomes.melisearchable.presenter.ProductDetail;
 import com.irlangomes.melisearchable.presenter.ProductDetailPresenterImpl;
 
@@ -25,7 +23,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductDetailPresenterImplTest {

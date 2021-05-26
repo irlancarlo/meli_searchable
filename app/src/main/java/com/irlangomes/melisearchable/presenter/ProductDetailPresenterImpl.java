@@ -1,7 +1,6 @@
 package com.irlangomes.melisearchable.presenter;
 
 import com.irlangomes.melisearchable.api.MeliService;
-import com.irlangomes.melisearchable.helper.RetrofitConfig;
 import com.irlangomes.melisearchable.model.Product;
 
 import retrofit2.Call;
@@ -22,27 +21,30 @@ public class ProductDetailPresenterImpl implements ProductDetail.ProductDetailPr
     public void findProductDetail(String idProduct) {
         view.setVisibleProgressBar();
         meliService.findProductDetail(idProduct).enqueue(new Callback<Product>() {
-                    @Override
-                    public void onResponse(Call<Product> call, Response<Product> response) {
-                        if(response.isSuccessful()){
-                            Product product = response.body();
-                            view.displayTitle(product.title);
-                            view.displayPrice(product.getPrice());
-                            view.configViewPager(product.pictures);
-                            countPictures(0, product.pictures.size());
-                            view.setGoneProgressBar();
-                        }else{
-                            view.setGoneProgressBar();
-                            view.displayError();
-                        }
-                    }
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                responseCallback(response);
+            }
 
-                    @Override
-                    public void onFailure(Call<Product> call, Throwable t) {
-                        view.setGoneProgressBar();
-                        view.displayError();
-                    }
-                });
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                view.setGoneProgressBar();
+                view.displayError();
+            }
+        });
+    }
+
+    private void responseCallback(Response<Product> response) {
+        view.setGoneProgressBar();
+        if (response.isSuccessful()) {
+            Product product = response.body();
+            view.displayTitle(product.title);
+            view.displayPrice(product.getPrice());
+            view.configViewPager(product.pictures);
+            countPictures(0, product.pictures.size());
+        } else {
+            view.displayError();
+        }
     }
 
     @Override

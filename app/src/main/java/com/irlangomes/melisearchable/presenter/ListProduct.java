@@ -8,8 +8,9 @@ public interface ListProduct {
 
     interface ListProductView {
         void displayProduct(List<Product> results);
-        void displayError();
+        void displayErrorMsg();
         void setGoneProgressBar();
+        void displayEmptySearchMsg();
     }
 
     interface ListProductPresenter {

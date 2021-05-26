@@ -4,7 +4,10 @@
 
     <item
         android:id="@+id/menu_search"
-        android:icon="@drawable/ic_action_action_search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:iconTint="@android:color/black"
+        android:orderInCategory="100"
         android:title="Pesquisar"
         app:showAsAction="always" />
+
 </menu>

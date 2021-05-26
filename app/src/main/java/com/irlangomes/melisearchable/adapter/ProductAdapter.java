@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.irlangomes.melisearchable.R;
 import com.irlangomes.melisearchable.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
@@ -26,6 +25,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public ProductAdapter(List<Product> products, Context context) {
         this.products = products;
         this.context = context;
+    }
+
+    public void clear() {
+        int size = products.size();
+        products.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     @NonNull
@@ -44,9 +49,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
         String url = product.thumbnail;
         Glide
-            .with(context)
-            .load(url)
-            .into(holder.thumbnail);
+                .with(context)
+                .load(url)
+                .into(holder.thumbnail);
     }
 
 

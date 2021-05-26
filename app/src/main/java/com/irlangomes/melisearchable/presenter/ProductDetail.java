@@ -8,17 +8,25 @@ public interface ProductDetail {
 
     interface ProductDetailView {
         void displayError();
+
         void setGoneProgressBar();
+
         void setVisibleProgressBar();
+
         void displayTitle(String title);
+
         void displayPrice(String price);
+
         void displayCountPictures(String label);
+
         void configViewPager(List<Picture> pictureList);
     }
 
     interface ProductDetailPresenter {
         void findProductDetail(String idProduct);
+
         String countPictures(int currentPosition, int total);
+
         void destroyView();
     }
 }

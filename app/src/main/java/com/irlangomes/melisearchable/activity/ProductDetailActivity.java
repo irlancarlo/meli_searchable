@@ -16,17 +16,10 @@ import com.irlangomes.melisearchable.adapter.ProductDetailAdapter;
 import com.irlangomes.melisearchable.api.MeliService;
 import com.irlangomes.melisearchable.helper.RetrofitConfig;
 import com.irlangomes.melisearchable.model.Picture;
-import com.irlangomes.melisearchable.model.Product;
-import com.irlangomes.melisearchable.model.ResultProduct;
 import com.irlangomes.melisearchable.presenter.ProductDetail;
 import com.irlangomes.melisearchable.presenter.ProductDetailPresenterImpl;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetail.ProductDetailView {
 
@@ -71,6 +64,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void setGoneProgressBar() {
         progressBar.setVisibility(View.GONE);
+        view.setVisibility(View.VISIBLE);
     }
 
     @Override

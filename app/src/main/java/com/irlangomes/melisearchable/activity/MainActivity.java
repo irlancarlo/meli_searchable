@@ -78,7 +78,9 @@ public class MainActivity extends AppCompatActivity implements ListProduct.ListP
 
             @Override
             public void onSearchViewClosed() {
-                findProduct("");
+                if (productAdapter != null) {
+                    productAdapter.clear();
+                }
             }
         });
     }
@@ -93,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements ListProduct.ListP
     }
 
     public void findProduct(String query) {
+        if (productAdapter != null) {
+            productAdapter.clear();
+        }
+        searchView.hideKeyboard(getCurrentFocus());
         progressBar.setVisibility(View.VISIBLE);
         presenter.findProduct(query);
     }
@@ -130,14 +136,27 @@ public class MainActivity extends AppCompatActivity implements ListProduct.ListP
     }
 
     @Override
-    public void displayError() {
-        Snackbar.make(view, "Erro ao carregar a lista de produtos.", Snackbar.LENGTH_LONG)
-                .show();
+    public void displayErrorMsg() {
+        generateMsg("Erro ao carregar a lista de produtos.");
+    }
+
+    private void generateMsg(String title) {
+        if (recyclerProduct != null) {
+            recyclerProduct.getRecycledViewPool().clear();
+        }
+        Snackbar snackbar = Snackbar.make(view, title, Snackbar.LENGTH_LONG);
+        snackbar.setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
     }
 
     @Override
     public void setGoneProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void displayEmptySearchMsg() {
+        generateMsg("Pesquisa não retornou dados.");
     }
 
     @Override
