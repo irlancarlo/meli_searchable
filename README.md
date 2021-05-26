@@ -52,9 +52,11 @@ Fonte: [API para desenvolvedores](https://developers.mercadolibre.com.ar/es_ar/i
 Configuração do ambiente de teste.
 Para evitar instabilidades, é altamente recomendável que você desative as animações do sistema nos dispositivos virtuais ou físicos usados para testes. No dispositivo, em Config. > Opções do desenvolvedor, desative estas três configurações:
 
-> Escala de animação da janela
-> Escala de animação de transição
-> Escala de duração do Animator
+> Escala de animação da janela; 
+> 
+> Escala de animação de transição;
+>  
+> Escala de duração do Animator; 
 
 Fonte: [Instruções de configuração do Espresso](https://developer.android.com/training/testing/espresso/setup)
 
