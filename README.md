@@ -58,7 +58,20 @@ Para evitar instabilidades, é altamente recomendável que você desative as ani
 >  
 > Escala de duração do Animator; 
 
-Fonte: [Instruções de configuração do Espresso](https://developer.android.com/training/testing/espresso/setup)
+Fonte: [Instruções de configuração do Espresso](https://developer.android.com/training/testing/espresso/setup
+
+
+### Telas do Aplicativo
+
+Campo de busca:
+![Screenshot](campo_busca.png)
+
+Resultado da busca:
+![Screenshot](resultado_busca.png)
+
+Detalhe do produto:
+![Screenshot](detalhe_produto.png)
+
 
 ## License
 
